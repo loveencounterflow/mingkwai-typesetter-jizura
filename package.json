@@ -1,0 +1,28 @@
+{
+  "name": "mingkwai-typesetter-jizura",
+  "version": "1.0.0",
+  "description": "MingKwai TypeSetter plugin with some Jizura-specific extensions, mainly concerning DB requests and CJK handling",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "gulp --harmony build",
+    "mkts": "node --harmony lib/cli.js mkts $2",
+    "test": "npm run build && node --harmony lib/tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loveencounterflow/mingkwai-typesetter-jizura.git"
+  },
+  "keywords": [
+    "mingkwai",
+    "typesetting",
+    "tex",
+    "latex",
+    "cjk"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/loveencounterflow/mingkwai-typesetter-jizura/issues"
+  },
+  "homepage": "https://github.com/loveencounterflow/mingkwai-typesetter-jizura"
+}
