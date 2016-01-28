@@ -1,6 +1,6 @@
 {
   "name": "mingkwai-typesetter-jizura",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MingKwai TypeSetter plugin with some Jizura-specific extensions, mainly concerning DB requests and CJK handling",
   "main": "lib/main.js",
   "scripts": {
