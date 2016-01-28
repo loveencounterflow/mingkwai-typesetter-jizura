@@ -13,6 +13,7 @@
     "url": "https://github.com/loveencounterflow/mingkwai-typesetter-jizura.git"
   },
   "keywords": [
+    "mingkwai-typesetter-plugin",
     "mingkwai",
     "typesetting",
     "tex",
@@ -24,5 +25,14 @@
   "bugs": {
     "url": "https://github.com/loveencounterflow/mingkwai-typesetter-jizura/issues"
   },
-  "homepage": "https://github.com/loveencounterflow/mingkwai-typesetter-jizura"
+  "homepage": "https://github.com/loveencounterflow/mingkwai-typesetter-jizura",
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "gulp": "^3.9.0",
+    "gulp-coffee": "^2.3.1",
+    "gulp-sourcemaps": "^1.6.0"
+  },
+  "dependencies": {
+    "cnd": "^1.0.9"
+  }
 }
