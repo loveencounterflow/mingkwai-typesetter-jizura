@@ -7,7 +7,7 @@ njs_fs                    = require 'fs'
 #...........................................................................................................
 CND                       = require 'cnd'
 rpr                       = CND.rpr
-badge                     = 'mkts/custom-jzr'
+badge                     = 'MKTS/JIZURA/main'
 log                       = CND.get_logger 'plain',     badge
 info                      = CND.get_logger 'info',      badge
 whisper                   = CND.get_logger 'whisper',   badge
@@ -34,20 +34,18 @@ $async                    = D.remit_async.bind D
 # { CACHE, OPTIONS, }       = require './options'
 # SEMVER                    = require 'semver'
 #...........................................................................................................
-XNCHR                     = require './xnchr'
-# MKTS                      = require './main'
+MKTS                      = require 'mingkwai-typesetter'
 # MKTSCRIPT_WRITER          = require './mktscript-writer'
-MD_READER                 = require './md-reader'
-hide                      = MD_READER.hide.bind        MD_READER
-copy                      = MD_READER.copy.bind        MD_READER
-stamp                     = MD_READER.stamp.bind       MD_READER
-unstamp                   = MD_READER.unstamp.bind     MD_READER
-select                    = MD_READER.select.bind      MD_READER
-is_hidden                 = MD_READER.is_hidden.bind   MD_READER
-is_stamped                = MD_READER.is_stamped.bind  MD_READER
+hide                      = MKTS.MD_READER.hide.bind        MKTS.MD_READER
+copy                      = MKTS.MD_READER.copy.bind        MKTS.MD_READER
+stamp                     = MKTS.MD_READER.stamp.bind       MKTS.MD_READER
+unstamp                   = MKTS.MD_READER.unstamp.bind     MKTS.MD_READER
+select                    = MKTS.MD_READER.select.bind      MKTS.MD_READER
+is_hidden                 = MKTS.MD_READER.is_hidden.bind   MKTS.MD_READER
+is_stamped                = MKTS.MD_READER.is_stamped.bind  MKTS.MD_READER
 # MACRO_ESCAPER             = require './macro-escaper'
 # LINEBREAKER               = require './linebreaker'
-HOLLERITH                 = require '../../hollerith'
+HOLLERITH                 = require 'hollerith'
 
 
 #-----------------------------------------------------------------------------------------------------------
@@ -417,7 +415,7 @@ HOLLERITH                 = require '../../hollerith'
       [ settings ] = parameters
       # send [ '.', 'text', ( rpr settings ), ( copy meta ), ]
       if ( glyphs = settings[ 'glyphs' ] )?
-        glyphs  = XNCHR.chrs_from_text glyphs if CND.isa_text glyphs
+        glyphs  = MKTS.XNCHR.chrs_from_text glyphs if CND.isa_text glyphs
         tasks   = []
         send [ '(', 'dump-db', glyphs, ( copy meta ), ]
         send [ '.', 'glyph', glyph, ( copy meta ), ] for glyph in glyphs
