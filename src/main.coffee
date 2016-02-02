@@ -7,7 +7,7 @@ njs_fs                    = require 'fs'
 #...........................................................................................................
 CND                       = require 'cnd'
 rpr                       = CND.rpr
-badge                     = 'MKTS/JIZURA/main'
+badge                     = 'MK/TS/JIZURA/main'
 log                       = CND.get_logger 'plain',     badge
 info                      = CND.get_logger 'info',      badge
 whisper                   = CND.get_logger 'whisper',   badge
@@ -25,33 +25,66 @@ D                         = require 'pipedreams'
 $                         = D.remit.bind D
 $async                    = D.remit_async.bind D
 #...........................................................................................................
-# ASYNC                     = require 'async'
-#...........................................................................................................
-# ƒ                         = CND.format_number.bind CND
-# HELPERS                   = require './helpers'
-# TEXLIVEPACKAGEINFO        = require './texlivepackageinfo'
-# options_route             = '../options.coffee'
-# { CACHE, OPTIONS, }       = require './options'
-# SEMVER                    = require 'semver'
-#...........................................................................................................
-debug '©70785', Object.keys global.MKTS
-debug '©70785', Object.keys MKTS
-@foo = 42
-
-# MKTS                      = require.main.require 'mingkwai-typesetter'
-MKTSCRIPT_WRITER          = require './mktscript-writer'
-
-
-hide                      = MKTS.MD_READER.hide.bind        MKTS.MD_READER
-copy                      = MKTS.MD_READER.copy.bind        MKTS.MD_READER
-stamp                     = MKTS.MD_READER.stamp.bind       MKTS.MD_READER
-unstamp                   = MKTS.MD_READER.unstamp.bind     MKTS.MD_READER
-select                    = MKTS.MD_READER.select.bind      MKTS.MD_READER
-is_hidden                 = MKTS.MD_READER.is_hidden.bind   MKTS.MD_READER
-is_stamped                = MKTS.MD_READER.is_stamped.bind  MKTS.MD_READER
-# MACRO_ESCAPER             = require './macro-escaper'
-# LINEBREAKER               = require './linebreaker'
 HOLLERITH                 = require 'hollerith'
+#...........................................................................................................
+hide                      = MK.TS.MD_READER.hide.bind        MK.TS.MD_READER
+copy                      = MK.TS.MD_READER.copy.bind        MK.TS.MD_READER
+stamp                     = MK.TS.MD_READER.stamp.bind       MK.TS.MD_READER
+unstamp                   = MK.TS.MD_READER.unstamp.bind     MK.TS.MD_READER
+select                    = MK.TS.MD_READER.select.bind      MK.TS.MD_READER
+is_hidden                 = MK.TS.MD_READER.is_hidden.bind   MK.TS.MD_READER
+is_stamped                = MK.TS.MD_READER.is_stamped.bind  MK.TS.MD_READER
+
+
+### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
+### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
+### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
+$map = D._ES.map.bind D._ES
+
+f = ->
+
+  #-----------------------------------------------------------------------------------------------------------
+  @remit_async_spread = ( method ) ->
+    unless ( arity = method.length ) is 2
+      throw new Error "expected a method with an arity of 2, got one with an arity of #{arity}"
+    #.........................................................................................................
+    Z       = []
+    input   = D.create_throughstream()
+    output  = D.create_throughstream()
+    #.........................................................................................................
+    $call = =>
+      return $async ( event, done ) =>
+        #.........................................................................................................
+        collect = ( data ) =>
+          Z.push data
+          return null
+        #.........................................................................................................
+        collect.done = ( data ) =>
+          collect data if data?
+          done Object.assign [], Z
+          Z.length = 0
+        method event, collect
+        return null
+    #.........................................................................................................
+    $spread = =>
+      return $ ( collection, send, end ) =>
+        if collection?
+          send event for event in collection
+        if end?
+          end()
+    #.........................................................................................................
+    input
+      .pipe $call()
+      .pipe $spread()
+      .pipe output
+    #.........................................................................................................
+    return @TEE.from_readwritestreams input, output
+
+f.apply D
+
+### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
+### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
+### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
 
 
 #-----------------------------------------------------------------------------------------------------------
@@ -247,7 +280,7 @@ HOLLERITH                 = require 'hollerith'
 
 #-----------------------------------------------------------------------------------------------------------
 @$most_frequent.$assemble = ( S ) =>
-  track = MD_READER.TRACKER.new_tracker '(glyphs)'
+  track = MK.TS.MD_READER.TRACKER.new_tracker '(glyphs)'
   #.........................................................................................................
   return $ ( event, send ) =>
     within_glyphs = track.within '(glyphs)'
@@ -270,7 +303,7 @@ HOLLERITH                 = require 'hollerith'
 
 #-----------------------------------------------------------------------------------------------------------
 @$most_frequent.$details_from_glyphs = ( S ) =>
-  # track     = MD_READER.TRACKER.new_tracker '(glyphs-with-fncrs)'
+  # track     = MK.TS.MD_READER.TRACKER.new_tracker '(glyphs-with-fncrs)'
   HOLLERITH = require '../../hollerith'
   #.........................................................................................................
   return D.remit_async_spread ( event, send ) =>
@@ -293,7 +326,7 @@ HOLLERITH                 = require 'hollerith'
 
 #-----------------------------------------------------------------------------------------------------------
 @$most_frequent.with_fncrs.$format = ( S ) =>
-  track         = MD_READER.TRACKER.new_tracker '(glyphs-with-fncrs)'
+  track         = MK.TS.MD_READER.TRACKER.new_tracker '(glyphs-with-fncrs)'
   this_glyph    = null
   reading_keys  = [ 'reading/py', 'reading/hg', 'reading/ka', 'reading/hi', ]
   has_readings  = ( x ) -> ( CND.isa_list x ) and ( x.length > 0 )
@@ -323,7 +356,7 @@ HOLLERITH                 = require 'hollerith'
 
 #-----------------------------------------------------------------------------------------------------------
 @$most_frequent.with_fncrs.$assemble = ( S ) =>
-  track       = MD_READER.TRACKER.new_tracker '(glyphs-with-fncrs)'
+  track       = MK.TS.MD_READER.TRACKER.new_tracker '(glyphs-with-fncrs)'
   this_glyph  = null
   #.........................................................................................................
   return $ ( event, send ) =>
@@ -421,7 +454,7 @@ HOLLERITH                 = require 'hollerith'
       [ settings ] = parameters
       # send [ '.', 'text', ( rpr settings ), ( copy meta ), ]
       if ( glyphs = settings[ 'glyphs' ] )?
-        glyphs  = MKTS.XNCHR.chrs_from_text glyphs if CND.isa_text glyphs
+        glyphs  = MK.TS.XNCHR.chrs_from_text glyphs if CND.isa_text glyphs
         tasks   = []
         send [ '(', 'dump-db', glyphs, ( copy meta ), ]
         send [ '.', 'glyph', glyph, ( copy meta ), ] for glyph in glyphs
@@ -433,7 +466,7 @@ HOLLERITH                 = require 'hollerith'
 
 #-----------------------------------------------------------------------------------------------------------
 @$dump_db.$format = ( S ) =>
-  track     = MD_READER.TRACKER.new_tracker '(dump-db)'
+  track     = MK.TS.MD_READER.TRACKER.new_tracker '(dump-db)'
   excludes  = [
     'guide/kwic/v1/lineup/wrapped/infix'
     'guide/kwic/v1/lineup/wrapped/prefix'
@@ -494,8 +527,8 @@ HOLLERITH                 = require 'hollerith'
 #-----------------------------------------------------------------------------------------------------------
 @$py = ( S ) =>
   ### TAINT should translate special syntax to ordinary commands, then translate to TeX ###
-  # track   = MD_READER.TRACKER.new_tracker '(py)'
-  # remark  = MD_READER._get_remark()
+  # track   = MK.TS.MD_READER.TRACKER.new_tracker '(py)'
+  # remark  = MK.TS.MD_READER._get_remark()
   ### TAINT make RegEx more specific, don't include punctuation ###
   py_pattern = /// !py!([^\s]+) ///
   compile_pinyin = ( text ) =>
