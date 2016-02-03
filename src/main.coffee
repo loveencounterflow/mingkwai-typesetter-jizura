@@ -585,7 +585,6 @@ f.apply D
           send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
           send [ 'tex', "\\mktsVerticalBar{}" ]
         else
-          debug '©38472', rpr chunk
           send [ '.', 'text', chunk, ( copy meta ), ]
     #.......................................................................................................
     else
