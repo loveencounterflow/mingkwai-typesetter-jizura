@@ -96,7 +96,6 @@ f.apply D
   else
     warn "establishing new DB connection to DB at #{db_route}"
     S.JZR.db = HOLLERITH.new_db db_route, create: no
-  debug '©52564', Object.keys S.JZR.db
   #.........................................................................................................
   return D.TEE.from_pipeline [
     @$fontlist                                    S
