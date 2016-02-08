@@ -208,6 +208,10 @@ f.apply D
     """
   #.........................................................................................................
   template = """
+    {\\($texname){\\cjk\\($texname){}永東國酬愛鬱靈鷹袋南去經三國，東來過五湖东国爱郁灵鹰经来过} AaBbCcDdEeFfghijklmnopqrstuvwxyz}
+    """
+  #.........................................................................................................
+  template = """
     {\\($texname){\\cjk\\($texname){}本书使用的数字，符号一览表書覽} AaBbCcDdEeFfghijklmnopqrstuvwxyz}
     """
   #.........................................................................................................
@@ -564,8 +568,9 @@ f.apply D
 #-----------------------------------------------------------------------------------------------------------
 @$vertical_bar = ( S ) =>
   use_vertical_bar        = no
-  pattern                 = '|'
-  matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
+  # pattern                 = '|'
+  # matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
+  matcher                 = /// ( [ 「【 】」] ) ///g
   #.........................................................................................................
   return $ ( event, send ) =>
     #.......................................................................................................
@@ -581,11 +586,16 @@ f.apply D
       [ type, name, text, meta, ] = event
       chunks                      = text.split matcher
       for chunk in chunks
-        if chunk is pattern
-          send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
-          send [ 'tex', "\\mktsVerticalBar{}" ]
-        else
-          send [ '.', 'text', chunk, ( copy meta ), ]
+        switch chunk
+          when '【', '】'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\\mktsVerticalBar{}" ]
+          when '「', '」'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send [ 'tex', "{\\mktsFontfileSunexta\\color{red}\\sbSmash{#{chunk}}}" ]
+            send [ 'tex', "{\\mktsFontfileSunexta\\color{red}\\makebox[0mm]{#{chunk}}}" ]
+          else
+            send [ '.', 'text', chunk, ( copy meta ), ]
     #.......................................................................................................
     else
       send event
