@@ -99,7 +99,8 @@ f.apply D
   #.........................................................................................................
   return D.TEE.from_pipeline [
     @$fontlist                                    S
-    @$vertical_bar                                S
+    # @$vertical_bar_braces                         S
+    @$vertical_bar_divider                        S
     #.......................................................................................................
     @$most_frequent.with_fncrs.$rewrite_events    S
     @$dump_db                                     S
@@ -212,7 +213,7 @@ f.apply D
     """
   #.........................................................................................................
   template = """
-    {\\($texname){\\cjk\\($texname){}本书使用的数字，符号一览表書覽} AaBbCcDdEeFfghijklmnopqrstuvwxyz}
+    {\\($texname){\\cjk\\($texname){}∫🞛🞁▲●⋮⊥「本」书使用的数字，符号一览表書覽} AaBbCcDdEeFfghijklmnopqrstuvwxyz}
     """
   #.........................................................................................................
   return $ ( event, send ) =>
@@ -566,7 +567,7 @@ f.apply D
 #===========================================================================================================
 # VERTICAL BAR
 #-----------------------------------------------------------------------------------------------------------
-@$vertical_bar = ( S ) =>
+@$vertical_bar_braces = ( S ) =>
   use_vertical_bar        = no
   # pattern                 = '|'
   # matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
@@ -589,12 +590,50 @@ f.apply D
         switch chunk
           when '【', '】'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
-            send [ 'tex', "\\mktsVerticalBar{}" ]
-          when '「', '」'
+            send [ 'tex', "\\mktsJzrVerticalBar{}" ]
+          when '「'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
-            # send [ 'tex', "{\\mktsFontfileSunexta\\color{red}\\sbSmash{#{chunk}}}" ]
-            send [ 'tex', "{\\mktsFontfileSunexta\\color{red}\\makebox[0mm]{#{chunk}}}" ]
+            send [ 'tex', "\\mktsJzrGlyphbraceLeft{}", ]
+          when '」'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\\mktsJzrGlyphbraceRight{}", ]
           else
+            send [ '.', 'text', chunk, ( copy meta ), ]
+    #.......................................................................................................
+    else
+      send event
+
+#-----------------------------------------------------------------------------------------------------------
+@$vertical_bar_divider = ( S ) =>
+  use_vertical_bar        = no
+  # pattern                 = '|'
+  # matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
+  matcher_1               = /// ( 【 | 】 | 」「 ) ///g
+  matcher_2               = /// [ 「 」 ] ///g
+  #.........................................................................................................
+  return $ ( event, send ) =>
+    #.......................................................................................................
+    if select event, [ '!', '(', ], 'JZR.vertical-bar'
+      send stamp event
+      use_vertical_bar = yes
+    #.......................................................................................................
+    else if select event, ')', 'JZR.vertical-bar'
+      send stamp event
+      use_vertical_bar = no
+    #.......................................................................................................
+    else if use_vertical_bar and select event, '.', 'text'
+      [ type, name, text, meta, ] = event
+      chunks                      = text.split matcher_1
+      for chunk in chunks
+        switch chunk
+          when '【', '】'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\\mktsJzrVerticalBar{}" ]
+          when '」「'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\\mktsJzrGlyphdivider{}", ]
+          else
+            chunk = chunk.replace matcher_2, ''
             send [ '.', 'text', chunk, ( copy meta ), ]
     #.......................................................................................................
     else
