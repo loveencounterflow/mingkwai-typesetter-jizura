@@ -590,7 +590,7 @@ f.apply D
         switch chunk
           when '【', '】'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
-            send [ 'tex', "\\mktsJzrVerticalBar{}" ]
+            send [ 'tex', "\\mktsJzrVerticalbarInfix{}" ]
           when '「'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\mktsJzrGlyphbraceLeft{}", ]
@@ -608,7 +608,7 @@ f.apply D
   use_vertical_bar        = no
   # pattern                 = '|'
   # matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
-  matcher_1               = /// ( 【 | 】 | 」「 ) ///g
+  matcher_1               = /// ( \| | 【 | 】 | 」「 ) ///g
   matcher_2               = /// [ 「 」 ] ///g
   #.........................................................................................................
   return $ ( event, send ) =>
@@ -628,7 +628,10 @@ f.apply D
         switch chunk
           when '【', '】'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
-            send [ 'tex', "\\mktsJzrVerticalBar{}" ]
+            send [ 'tex', "\\mktsJzrVerticalbarInfix{}" ]
+          when '|'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\\mktsJzrVerticalbarGlyph{}" ]
           when '」「'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\mktsJzrGlyphdivider{}", ]
