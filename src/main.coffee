@@ -390,8 +390,10 @@ f.apply D
       value = value[ 0 ]
       # [ [ '1293f---', '1217f---', null ], '女', [ '子' ], [] ]
       [ _, infix, suffix, prefix, ] = value
-      unless prefix.length is 0
-        throw new Error "expected empty prefix, got #{glyph} #{rpr value}"
+      # debug '392', Object.keys details
+      # debug '392', value
+      # unless prefix.length is 0
+      #   throw new Error "expected empty prefix, got #{glyph} #{rpr value}"
       # send [ 'tex', "{\\mktsStyleGuides{}", ]
       value = infix + suffix.join ''
       send [ '.', 'text', value, ( copy meta ), ]
