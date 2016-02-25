@@ -39,7 +39,7 @@ is_stamped                = MK.TS.MD_READER.is_stamped.bind  MK.TS.MD_READER
 ### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
 ### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
 ### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
-$map = D._ES.map.bind D._ES
+# $map = D._ES.map.bind D._ES
 
 f = ->
 
@@ -49,8 +49,8 @@ f = ->
       throw new Error "expected a method with an arity of 2, got one with an arity of #{arity}"
     #.........................................................................................................
     Z       = []
-    input   = D.create_throughstream()
-    output  = D.create_throughstream()
+    input   = @create_throughstream()
+    output  = @create_throughstream()
     #.........................................................................................................
     $call = =>
       return $async ( event, done ) =>
