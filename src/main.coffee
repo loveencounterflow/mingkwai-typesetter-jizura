@@ -573,9 +573,10 @@ f.apply D
   use_vertical_bar        = no
   # pattern                 = '|'
   # matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
-  matcher                 = /// ( [ 「【 】」] ) ///g
+  matcher                 = /// ( [ 「 【 】 」 ] | \.\.\. ) ///g
   #.........................................................................................................
   return $ ( event, send ) =>
+    debug '0001', event
     #.......................................................................................................
     if select event, [ '!', '(', ], 'JZR.vertical-bar'
       send stamp event
@@ -588,6 +589,7 @@ f.apply D
     else if use_vertical_bar and select event, '.', 'text'
       [ type, name, text, meta, ] = event
       chunks                      = text.split matcher
+      debug '7767', text, chunks
       for chunk in chunks
         switch chunk
           when '【', '】'
@@ -599,6 +601,9 @@ f.apply D
           when '」'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\mktsJzrGlyphbraceRight{}", ]
+          when '...'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\\hrulefill{}", ]
           else
             send [ '.', 'text', chunk, ( copy meta ), ]
     #.......................................................................................................
@@ -610,7 +615,7 @@ f.apply D
   use_vertical_bar        = no
   # pattern                 = '|'
   # matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
-  matcher_1               = /// ( \| | 【 | 】 | 」「 ) ///g
+  matcher_1               = /// ( \| | 【 | 】 | 」 | 「 | ——\. | \.—— ) ///g
   matcher_2               = /// [ 「 」 ] ///g
   #.........................................................................................................
   return $ ( event, send ) =>
@@ -637,6 +642,14 @@ f.apply D
           when '」「'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\mktsJzrGlyphdivider{}", ]
+          when '——.'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send [ 'tex', "{\\tfRaise{0.5}\\hrulefill{}..}", ]
+            send [ 'tex', "{\\tfRaise{0.3}\\hrulefill{}}\u2004\u2004", ]
+          when '.——'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\u2004\u2004{\\tfRaise{0.3}\\hrulefill{}}", ]
+            # send [ 'tex', "∞❄·⎨\\{\\xleaders\\hbox{—}\\hfill\\kern0pt", ]
           else
             chunk = chunk.replace matcher_2, ''
             send [ '.', 'text', chunk, ( copy meta ), ]
