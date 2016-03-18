@@ -216,6 +216,14 @@ f.apply D
     {\\($texname){\\cjk\\($texname){}≈∫🞛🞁▲●⋮⊥「本」书使用的数字，符号一览表書覽} AaBbCcDdEeFfghijklmnopqrstuvwxyz}
     """
   #.........................................................................................................
+  template = """
+    {\\mktsStyleNormal{}How vexingly quick daft zebras jump!} {\\($texname){}How vexingly quick daft zebras jump!} {\\mktsStyleItalic{}How vexingly quick daft zebras jump!}
+    """
+  #.........................................................................................................
+  template = """
+    {\\mktsStyleNormal{}How vexingly quick fäöüß} {\\($texname){}How vexingly quick fäöüß} {\\mktsStyleItalic{}How vexingly quick fäöüß}
+    """
+  #.........................................................................................................
   return $ ( event, send ) =>
     #.......................................................................................................
     if select event, '!', 'JZR.fontlist'
