@@ -621,10 +621,8 @@ f.apply D
 #-----------------------------------------------------------------------------------------------------------
 @$vertical_bar_divider = ( S ) =>
   use_vertical_bar        = no
-  # pattern                 = '|'
-  # matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
-  matcher_1               = /// ( \| | 【 | 】 | 」 | 「 | ——\. | \.—— ) ///g
-  matcher_2               = /// [ 「 」 ] ///g
+  matcher                 = /// ( \| | 【 | 】 | 」 | 「 | ——\. | \.—— | ==> ) ///g
+  # matcher_2               = /// [ 「 」 ] ///g
   #.........................................................................................................
   return $ ( event, send ) =>
     #.......................................................................................................
@@ -638,7 +636,7 @@ f.apply D
     #.......................................................................................................
     else if use_vertical_bar and select event, '.', 'text'
       [ type, name, text, meta, ] = event
-      chunks                      = text.split matcher_1
+      chunks                      = text.split matcher
       for chunk in chunks
         switch chunk
           when '【', '】'
@@ -658,8 +656,11 @@ f.apply D
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\u2004\u2004{\\tfRaise{0.3}\\hrulefill{}}", ]
             # send [ 'tex', "∞❄·⎨\\{\\xleaders\\hbox{—}\\hfill\\kern0pt", ]
+          when '==>'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\\hfill{}", ]
           else
-            chunk = chunk.replace matcher_2, ''
+            # chunk = chunk.replace matcher_2, ''
             send [ '.', 'text', chunk, ( copy meta ), ]
     #.......................................................................................................
     else
