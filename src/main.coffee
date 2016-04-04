@@ -224,6 +224,10 @@ f.apply D
     {\\mktsStyleNormal{}How vexingly quick fäöüß} {\\($texname){}How vexingly quick fäöüß} {\\mktsStyleItalic{}How vexingly quick fäöüß}
     """
   #.........................................................................................................
+  template = """
+    {\\($texname){\\cjk\\($texname){}春 ⿱𡗗日}
+    """
+  #.........................................................................................................
   return $ ( event, send ) =>
     #.......................................................................................................
     if select event, '!', 'JZR.fontlist'
@@ -651,10 +655,10 @@ f.apply D
           when '——.'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             # send [ 'tex', "{\\tfRaise{0.5}\\hrulefill{}..}", ]
-            send [ 'tex', "{\\tfRaise{0.3}\\hrulefill{}}\u2004\u2004", ]
+            send [ 'tex', "{\\tfRaise{0.3}\\mktsHrulefill{1}}\u2004\u2004", ]
           when '.——'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
-            send [ 'tex', "\u2004\u2004{\\tfRaise{0.3}\\hrulefill{}}", ]
+            send [ 'tex', "\u2004\u2004{\\tfRaise{0.3}\\mktsHrulefill{1}}", ]
             # send [ 'tex', "∞❄·⎨\\{\\xleaders\\hbox{—}\\hfill\\kern0pt", ]
           when '==>'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
