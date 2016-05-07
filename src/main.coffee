@@ -240,6 +240,10 @@ f.apply D
     {\\cjk\\($texname){}⺝#{_X_glyphs}}
     """
   #.........................................................................................................
+  template = """
+    {\\cjk\\($texname){}x←xx→x↑x↓x↔x↕x🡐x🡒x🡑x🡓x🡔x🡕x🡖x🡗x🡘x🡙}
+    """
+  #.........................................................................................................
   return $ ( event, send ) =>
     #.......................................................................................................
     if select event, '!', 'JZR.fontlist'
@@ -597,7 +601,7 @@ f.apply D
   use_vertical_bar        = no
   # pattern                 = '|'
   # matcher                 = /// ( #{CND.escape_regex pattern} ) ///g
-  matcher                 = /// ( [ 「 【 】 」 ] | \.\.\. ) ///g
+  matcher                 = /// ( [ 「 【 】 」 ^ ] | \.\.\. ) ///g
   #.........................................................................................................
   return $ ( event, send ) =>
     debug '0001', event
@@ -613,7 +617,7 @@ f.apply D
     else if use_vertical_bar and select event, '.', 'text'
       [ type, name, text, meta, ] = event
       chunks                      = text.split matcher
-      debug '7767', text, chunks
+      # debug '7767', text, chunks
       for chunk in chunks
         switch chunk
           when '【', '】'
@@ -628,6 +632,9 @@ f.apply D
           when '...'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\hrulefill{}", ]
+          when '^'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send [ 'tex', "\\hrulefill{}", ]
           else
             send [ '.', 'text', chunk, ( copy meta ), ]
     #.......................................................................................................
@@ -637,7 +644,7 @@ f.apply D
 #-----------------------------------------------------------------------------------------------------------
 @$vertical_bar_divider = ( S ) =>
   use_vertical_bar        = no
-  matcher                 = /// ( \| | 【 | 】 | 」 | 「 | ——\. | \.—— | ==> ) ///g
+  matcher                 = /// ( \| | 【 | 】 | 」 | 「 | ——\. | \.—— | \^ | ==> ) ///g
   # matcher_2               = /// [ 「 」 ] ///g
   #.........................................................................................................
   return $ ( event, send ) =>
@@ -675,6 +682,9 @@ f.apply D
           when '==>'
             send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\hfill{}", ]
+          when '^'
+            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            send [ 'tex', "\\hfill{}{\\mktsFontfileEbgaramondtwelveregular{}↑}", ]
           else
             # chunk = chunk.replace matcher_2, ''
             send [ '.', 'text', chunk, ( copy meta ), ]
