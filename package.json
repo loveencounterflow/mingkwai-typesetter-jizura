@@ -38,7 +38,7 @@
   "dependencies": {
     "cnd": "^3.0.4",
     "coffeenode-suspend": "^0.1.11",
-    "hollerith": "^1.2.3",
+    "hollerith": "^1.2.4",
     "pipedreams": "^3.0.8"
   }
 }
