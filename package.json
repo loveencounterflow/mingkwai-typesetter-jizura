@@ -36,9 +36,9 @@
     "mingkwai-typesetter": "1.x"
   },
   "dependencies": {
-    "cnd": "^3.0.4",
+    "cnd": "^4.1.1",
     "coffeenode-suspend": "^0.1.11",
-    "hollerith": "^1.2.4",
-    "pipedreams": "^3.0.8"
+    "hollerith": "^4.0.6",
+    "pipedreams": "^4.2.2"
   }
 }
