@@ -25,8 +25,6 @@ D                         = require 'pipedreams'
 $                         = D.remit.bind D
 $async                    = D.remit_async.bind D
 #...........................................................................................................
-HOLLERITH                 = require 'hollerith'
-#...........................................................................................................
 hide                      = MK.TS.MD_READER.hide.bind        MK.TS.MD_READER
 copy                      = MK.TS.MD_READER.copy.bind        MK.TS.MD_READER
 stamp                     = MK.TS.MD_READER.stamp.bind       MK.TS.MD_READER
@@ -34,6 +32,9 @@ unstamp                   = MK.TS.MD_READER.unstamp.bind     MK.TS.MD_READER
 select                    = MK.TS.MD_READER.select.bind      MK.TS.MD_READER
 is_hidden                 = MK.TS.MD_READER.is_hidden.bind   MK.TS.MD_READER
 is_stamped                = MK.TS.MD_READER.is_stamped.bind  MK.TS.MD_READER
+#...........................................................................................................
+HOLLERITH                 = null
+
 
 
 ### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
@@ -86,16 +87,21 @@ f.apply D
 ### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
 ### # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ###
 
-
 #-----------------------------------------------------------------------------------------------------------
-@$main = ( S ) =>
-  db_route        = njs_path.resolve __dirname, '../../jizura-datasources/data/leveldb-v2'
-  S.JZR          ?= {}
+@_provide_db = ( S ) ->
+  HOLLERITH     = require 'hollerith'
+  db_route      = njs_path.resolve __dirname, '../../jizura-datasources/data/leveldb-v2'
+  S.JZR        ?= {}
   if S.JZR.db?
     help "re-using DB connection to DB at #{db_route}"
   else
     warn "establishing new DB connection to DB at #{db_route}"
-    S.JZR.db = HOLLERITH.new_db db_route, create: no
+    S.JZR.db  = HOLLERITH.new_db db_route, create: no
+  #.........................................................................................................
+  return null
+
+#-----------------------------------------------------------------------------------------------------------
+@$main = ( S ) =>
   #.........................................................................................................
   return D.TEE.from_pipeline [
     @$fontlist                                    S
@@ -248,6 +254,10 @@ f.apply D
     {\\($texname){}.⚫.▪.⏹.◼.⬛..}
     """
   #.........................................................................................................
+  template = """
+    {\\($texname){}カタカナ片仮名ひらがな平仮名}
+    """
+  #.........................................................................................................
   return $ ( event, send ) =>
     #.......................................................................................................
     if select event, '!', 'JZR.fontlist'
@@ -287,13 +297,13 @@ f.apply D
 
 #-----------------------------------------------------------------------------------------------------------
 @$most_frequent.$read = ( S ) =>
-  HOLLERITH_DEMO  = require '../../hollerith/lib/demo'
   defaults        =
     n:            100
     group_name:   'glyphs'
   #.........................................................................................................
   return D.remit_async_spread ( event, send ) =>
     return send.done event unless select event, '!', 'JZR.most_frequent'
+    HOLLERITH_DEMO = require '../../hollerith/lib/demo'
     [ type, name, [ n ], meta, ]  = event
     n                            ?= defaults.n
     group_name                    = meta[ 'jzr' ]?[ 'group-name' ] ? defaults.group_name
@@ -301,6 +311,7 @@ f.apply D
     step ( resume ) =>
       #.....................................................................................................
       try
+        @_provide_db S
         glyphs = yield HOLLERITH_DEMO.read_sample S.JZR.db, n, resume
       #.....................................................................................................
       catch error
@@ -341,7 +352,6 @@ f.apply D
 #-----------------------------------------------------------------------------------------------------------
 @$most_frequent.$details_from_glyphs = ( S ) =>
   # track     = MK.TS.MD_READER.TRACKER.new_tracker '(glyphs-with-fncrs)'
-  HOLLERITH = require '../../hollerith'
   #.........................................................................................................
   return D.remit_async_spread ( event, send ) =>
     # within_glyphs = track.within '(glyphs-with-fncrs)'
@@ -350,6 +360,7 @@ f.apply D
     if select event, '.', 'glyph'
       [ _, _, glyph, meta, ]  = event
       prefix                  = [ 'spo', glyph, ] # 'cp/sfncr'
+      @_provide_db S
       HOLLERITH.read_phrases S.JZR.db, { prefix, }, ( error, phrases ) =>
         details = { glyph, }
         for phrase in phrases
