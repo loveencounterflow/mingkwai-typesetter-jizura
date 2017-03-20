@@ -33,7 +33,7 @@
     "mingkwai-typesetter": "1.x"
   },
   "dependencies": {
-    "cnd": "^4.1.2",
+    "cnd": "^4.2.2",
     "coffeenode-suspend": "^0.1.11",
     "hollerith": "^1.2.4",
     "pipedreams": "^3.0.8"
