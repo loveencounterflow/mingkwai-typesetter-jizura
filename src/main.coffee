@@ -271,7 +271,8 @@ f.apply D
     """
   #.........................................................................................................
   template = """
-    {\\($texname) Ma\\"sstab MA\\"SSTAB GRO\\"SBUCHSTABE SÜ\\"SSTOFF}
+    {\\($texname){}0123456789abcdef 12.514.310 u-8e70 uxb-201a3}\\\\
+    {\\($texname){}1111111111111111 12.514.310 u-8e70 uxb-201a3}
     """
   #.........................................................................................................
   return $ ( event, send ) =>
@@ -629,6 +630,7 @@ f.apply D
 #===========================================================================================================
 # VERTICAL BAR
 #-----------------------------------------------------------------------------------------------------------
+### TAINT not used FTTB
 @$vertical_bar_braces = ( S ) =>
   use_vertical_bar        = no
   # pattern                 = '|'
@@ -672,6 +674,7 @@ f.apply D
     #.......................................................................................................
     else
       send event
+###
 
 #-----------------------------------------------------------------------------------------------------------
 @$vertical_bar_divider = ( S ) =>
@@ -695,27 +698,27 @@ f.apply D
       for chunk in chunks
         switch chunk
           when '【', '】'
-            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\mktsJzrVerticalbarInfix{}" ]
           when '|'
-            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\mktsJzrVerticalbarGlyph{}" ]
           when '」「'
-            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\mktsJzrGlyphdivider{}", ]
           when '——.'
-            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             # send [ 'tex', "{\\tfRaise{0.5}\\hrulefill{}..}", ]
             send [ 'tex', "{\\tfRaise{0.3}\\mktsHrulefill{1}}\u2004\u2004", ]
           when '.——'
-            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\u2004\u2004{\\tfRaise{0.3}\\mktsHrulefill{1}}", ]
             # send [ 'tex', "∞❄·⎨\\{\\xleaders\\hbox{—}\\hfill\\kern0pt", ]
           when '==>'
-            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\hfill{}", ]
           when '^'
-            send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
+            # send hide stamp [ '#', 'vertical-bar', chunk, ( copy meta ), ]
             send [ 'tex', "\\hfill{}{\\mktsFontfileEbgaramondtwelveregular{}↑}", ]
           else
             # chunk = chunk.replace matcher_2, ''
