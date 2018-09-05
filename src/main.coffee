@@ -106,6 +106,7 @@ f.apply D
     @$fontlist                                    S
     # @$vertical_bar_braces                         S
     @$vertical_bar_divider                        S
+    @$boxes_and_circles                           S
     #.......................................................................................................
     @$most_frequent.with_fncrs.$rewrite_events    S
     @$dump_db                                     S
@@ -273,6 +274,10 @@ f.apply D
   template = """
     {\\($texname){}0123456789abcdef 12.514.310 u-8e70 uxb-201a3}\\\\
     {\\($texname){}1111111111111111 12.514.310 u-8e70 uxb-201a3}
+    """
+  #.........................................................................................................
+  template = """
+    {\\($texname) {\\cjk\\($texname){}魚□[[⃞⃝⃟⃤⃢  ⃝a ⃝a⃞a⃟a⃠a⃢a⃣a⃤a⃥a}}
     """
   #.........................................................................................................
   return $ ( event, send ) =>
@@ -722,6 +727,39 @@ f.apply D
             send [ 'tex', "\\hfill{}{\\mktsFontfileEbgaramondtwelveregular{}↑}", ]
           else
             # chunk = chunk.replace matcher_2, ''
+            send [ '.', 'text', chunk, ( copy meta ), ]
+    #.......................................................................................................
+    else
+      send event
+
+
+#-----------------------------------------------------------------------------------------------------------
+@$boxes_and_circles = ( S ) =>
+  use_boxes_and_circles   = no
+  matcher                 = /// ( \(\( | \)\) | \[\[ | \]\] ) ///g
+  #.........................................................................................................
+  return $ ( event, send ) =>
+    #.......................................................................................................
+    if select event, [ '!', '(', ], 'JZR.boxes-and-circles'
+      send stamp event
+      use_boxes_and_circles = yes
+    #.......................................................................................................
+    else if select event, ')', 'JZR.boxes-and-circles'
+      send stamp event
+      use_boxes_and_circles = no
+    #.......................................................................................................
+    else if use_boxes_and_circles and select event, '.', 'text'
+      [ type, name, text, meta, ] = event
+      chunks                      = text.split matcher
+      for chunk in chunks
+        switch chunk
+          when '(('
+            send [ 'tex', "\\mktsCircledLetter{" ]
+          when '[['
+            send [ 'tex', "\\mktsBoxedLetter{" ]
+          when '))', ']]'
+            send [ 'tex', "}" ]
+          else
             send [ '.', 'text', chunk, ( copy meta ), ]
     #.......................................................................................................
     else
