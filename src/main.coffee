@@ -117,7 +117,7 @@ f.apply D
     @$most_frequent.with_fncrs.$assemble          S
     @$dump_db.$format                             S
     #.......................................................................................................
-    @$py                                          S
+    @$dictionary_readings_and_gloss               S
     ]
 
 #-----------------------------------------------------------------------------------------------------------
@@ -602,17 +602,17 @@ f.apply D
 #===========================================================================================================
 # PINYIN (EXPERIMENTAL, INCOMPLETE)
 #-----------------------------------------------------------------------------------------------------------
-@$py = ( S ) =>
+@$dictionary_readings_and_gloss = ( S ) =>
   ### TAINT should translate special syntax to ordinary commands, then translate to TeX ###
   # track   = MK.TS.MD_READER.TRACKER.new_tracker '(py)'
   # remark  = MK.TS.MD_READER._get_remark()
   ### TAINT make RegEx more specific, don't include punctuation ###
-  py_pattern = /// !py!([^\s]+) ///
-  compile_pinyin = ( text ) =>
-    return text.replace py_pattern, ( $0, $1 ) =>
-      ### TAINT translate digits to accents ###
-      ### TAINT consider to use fix_typography_for_tex ###
-      return "{\\py{}#{$1}}"
+  # py_pattern = /// !py!([^\s]+) ///
+  # compile_pinyin = ( text ) =>
+  #   return text.replace py_pattern, ( $0, $1 ) =>
+  #     ### TAINT translate digits to accents ###
+  #     ### TAINT consider to use fix_typography_for_tex ###
+  #     return "{\\py{}#{$1}}"
   #.........................................................................................................
   return $ ( event, send ) =>
     # within_py = track.within '(py)'
@@ -620,16 +620,16 @@ f.apply D
     [ type, name, text, meta, ] = event
     #.......................................................................................................
     # if within_py and text?
-    if select event, '(', 'py'
+    if select event, '(', [ 'py', 'ka', 'hi', 'hg', 'gloss', ]
       send stamp event
-      send [ 'tex', "{\\py{}", ]
+      send [ 'tex', "{\\#{name}{}", ]
     #.......................................................................................................
-    else if select event, ')', 'py'
+    else if select event, ')', [ 'py', 'ka', 'hi', 'hg', 'gloss', ]
       send stamp event
       send [ 'tex', "}", ]
     #.......................................................................................................
-    else if select event, '.', 'text'
-      send [ '.', 'text', ( compile_pinyin text ), ( copy meta ), ]
+    # else if select event, '.', 'text'
+    #   send [ '.', 'text', ( compile_pinyin text ), ( copy meta ), ]
     #.......................................................................................................
     else
       send event
