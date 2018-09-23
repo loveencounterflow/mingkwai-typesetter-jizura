@@ -219,14 +219,6 @@ f.apply D
     """
   #.........................................................................................................
   template = """
-    {\\mktsStyleNormal{}How vexingly quick daft zebras jump!} {\\($texname){}How vexingly quick daft zebras jump!} {\\mktsStyleItalic{}How vexingly quick daft zebras jump!}
-    """
-  #.........................................................................................................
-  template = """
-    {\\mktsStyleNormal{}How vexingly quick fäöüß} {\\($texname){}How vexingly quick fäöüß} {\\mktsStyleItalic{}How vexingly quick fäöüß}
-    """
-  #.........................................................................................................
-  template = """
     {\\cjk\\($texname){}春 ⿱𡗗日}
     """
   #.........................................................................................................
@@ -278,6 +270,18 @@ f.apply D
   #.........................................................................................................
   template = """
     {\\($texname) {\\cjk\\($texname){}魚□[[⃞⃝⃟⃤⃢  ⃝a ⃝a⃞a⃟a⃠a⃢a⃣a⃤a⃥a}}
+    """
+  #.........................................................................................................
+  template = """
+    {\\($texname) {\\cjk\\($texname){}タイショウタイクラス眀快排字噐器学の独立 がくのどくりつ}}
+    """
+  #.........................................................................................................
+  template = """
+    {\\mktsStyleNormal{}How vexingly quick daft zebras jump!} {\\($texname){}How vexingly quick daft zebras jump!} {\\mktsStyleItalic{}How vexingly quick daft zebras jump!}
+    """
+  #.........................................................................................................
+  template = """
+    {\\mktsStyleNormal{}How vexingly quick fäöüß} {\\($texname){}How vexingly quick fäöüß} {\\mktsStyleItalic{}How vexingly quick fäöüß}
     """
   #.........................................................................................................
   return $ ( event, send ) =>
